@@ -1,0 +1,10 @@
+WIDTH, HEIGHT = 400, 700
+GRID_SIZE = 40
+TOP_BAR_HEIGHT = 40
+FPS = 60
+
+BG_COLOR = (40, 40, 40)      # 深灰色背景
+GRID_COLOR = (100, 100, 100) # 网格线颜色
+BLUE = (50, 150, 255)
+RED = (255, 60, 50)
+WHITE = (230, 230, 230)
