@@ -1,5 +1,6 @@
 import pygame
 import random
+import time
 
 WIDTH, HEIGHT = 400, 700
 GRID_SIZE = 40
@@ -138,7 +139,7 @@ def main():
 
     running = True
 
-    key_count = 0
+    last_move = time.time()
     while running:
         clock.tick(FPS)
 
@@ -149,14 +150,17 @@ def main():
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a] or keys[pygame.K_LEFT]:
-            if key_count % 10 == 0:
+            cur_time = time.time()
+            if cur_time - last_move >= 0.1: # 每 0.1 秒允许一次移动
                 player.move(-1)
+                last_move = cur_time
+
 
         if keys[pygame.K_d] or keys[pygame.K_RIGHT]:
-            if key_count % 10 == 0:
+            cur_time = time.time()
+            if cur_time - last_move >= 0.1: # 每 0.1 秒允许一次移动
                 player.move(1)
-
-        key_count += 1
+                last_move = cur_time
 
         player.shoot(bullets)
 
