@@ -85,13 +85,15 @@ def main():
             if enemy.is_off_screen():
                 enemies.remove(enemy)
 
-        # ★ 碰撞检测
+        # ★ 1e：子弹 × 敌人（减血）
         for bullet in bullets[:]:
             for enemy in enemies[:]:
                 if enemy.get_rect().collidepoint(bullet.x, bullet.y):
                     bullets.remove(bullet)
-                    enemies.remove(enemy)
-                    score += 1
+                    enemy.hit()
+                    if enemy.hp <= 0:
+                        enemies.remove(enemy)
+                        score += 1
                     break
 
         # ===== 绘制 =====s
