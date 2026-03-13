@@ -6,7 +6,7 @@ from enemy import SnakeEnemy
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Shooting Game - 1d")
+pygame.display.set_caption("Shooting Game - v2")
 clock = pygame.time.Clock()
 font = pygame.font.SysFont("SimHei", 22)
 
@@ -44,6 +44,8 @@ def main():
     running = True
 
     last_move = time.time()
+    dead_enemy_indexes = [] # 记录死亡的敌人索引, 用于控制移动
+
     while running:
         clock.tick(FPS)
 
@@ -77,13 +79,13 @@ def main():
         # ★ 生成敌人（链状，最多 50 个）
         
         if enemy_num == 0:
-            new_enemy = SnakeEnemy()
+            new_enemy = SnakeEnemy(enemy_num)
             enemies.append(new_enemy)
             enemy_num += 1
         elif enemy_num < 50:
             tail = enemies[-1]
             if tail.grid_y == 0 and tail.x > 0:
-                new_enemy = SnakeEnemy()
+                new_enemy = SnakeEnemy(enemy_num)
                 new_enemy.x = tail.x - GRID_SIZE + 4
                 enemies.append(new_enemy)
                 enemy_num+=1
@@ -91,9 +93,29 @@ def main():
 
         # 更新敌人：每个独立沿着路径，但状态同步以一起移动
         for enemy in enemies[:]:
-            enemy.update()
+            if len(dead_enemy_indexes) == 0:
+                enemy.update()
+            elif enemy.index > dead_enemy_indexes[-1]:  #  只有索引在最后一个死亡敌人之后的敌人才移动
+                enemy.update()
+                
             if enemy.is_off_screen():
                 enemies.remove(enemy)
+        
+        # 检查死亡敌人的前后单元是否连接在了一起
+        if len(dead_enemy_indexes) > 0:
+            last_dead_index = dead_enemy_indexes[-1]
+            # 寻找 last_dead_index 前后存在的敌人
+            fronts = [e for e in enemies if e.index < last_dead_index]
+            backs = [e for e in enemies if e.index > last_dead_index]
+            if len(fronts) > 0 and len(backs) > 0:
+                front = fronts[-1]  # 最后一个前面敌人
+                back = backs[0]     # 第一个后面敌人
+                # 如果它们在同一行且相距一个格子，则认为它们连接在一起了
+                if abs(front.x - back.x) + abs(front.y - back.y) <=  GRID_SIZE - 3:
+                    dead_enemy_indexes.pop()  # 移除最后一个死亡敌人索引，认为它已经连接好了
+            else:
+                # 如果没有前面或后面敌人了，也认为连接好了
+                dead_enemy_indexes.pop()
 
         # ★ 1e：子弹 × 敌人（减血）
         for bullet in bullets[:]:
@@ -102,9 +124,13 @@ def main():
                     bullets.remove(bullet)
                     enemy.hit()
                     if enemy.hp <= 0:
+                        dead_enemy_indexes.append(enemy.index) # 记录死亡敌人索引
                         enemies.remove(enemy)
                         score += 1
                     break
+
+        # 保持索引有序, 从小到大
+        dead_enemy_indexes.sort() 
 
         # ===== 绘制 =====s
         screen.fill(BG_COLOR)

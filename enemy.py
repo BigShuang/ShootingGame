@@ -46,7 +46,7 @@ class Enemy:
         screen.blit(text, rect)
 
 class SnakeEnemy:
-    def __init__(self):
+    def __init__(self, index):
         # 使用网格坐标跟踪行
         self.grid_y = 0                  # 记录当前行号
         self.x = 0 * GRID_SIZE
@@ -58,6 +58,7 @@ class SnakeEnemy:
 
         # 初始状态向右（第0行是偶数行）
         self.state = "right"      # "right" / "left" / "down"
+        self.index = index        # 记录敌人索引
 
     def hit(self):
         self.hp -= 1
