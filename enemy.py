@@ -78,13 +78,13 @@ class SnakeEnemy:
 
         elif self.state == "down":
             self.y += self.speed
-            # 到达下一个网格行时更新行号并决定新方向
             if self.y % GRID_SIZE == 0:
                 self.grid_y += 1
-                # 偶数行向右，奇数行向左
-                if self.grid_y % 2 == 0:
+                # 每两行改变一次方向（隔一行）
+                # 0, 4, 8...行向右，2, 6, 10...行向左
+                if self.grid_y % 4 == 0:
                     self.state = "right"
-                else:
+                elif self.grid_y % 4 == 2:
                     self.state = "left"
 
 

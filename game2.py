@@ -39,7 +39,7 @@ def main():
     bullets = []
     enemies = []
     score = 0
-    enemy_timer = 0
+    enemy_num = 0
 
     running = True
 
@@ -74,13 +74,22 @@ def main():
             if bullet.is_off_screen():
                 bullets.remove(bullet)
 
-        # ★ 生成敌人
-        enemy_timer += 1
-        if enemy_timer >= 60:
-            enemies.append(SnakeEnemy())
-            enemy_timer = 0
+        # ★ 生成敌人（链状，最多 50 个）
+        
+        if enemy_num == 0:
+            new_enemy = SnakeEnemy()
+            enemies.append(new_enemy)
+            enemy_num += 1
+        elif enemy_num < 50:
+            tail = enemies[-1]
+            if tail.grid_y == 0 and tail.x > 0:
+                new_enemy = SnakeEnemy()
+                new_enemy.x = tail.x - GRID_SIZE + 4
+                enemies.append(new_enemy)
+                enemy_num+=1
 
-        # 更新敌人
+
+        # 更新敌人：每个独立沿着路径，但状态同步以一起移动
         for enemy in enemies[:]:
             enemy.update()
             if enemy.is_off_screen():
