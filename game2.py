@@ -2,7 +2,7 @@ import pygame
 import time
 from constants import *
 from player import Player
-from enemy import Enemy
+from enemy import SnakeEnemy
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -14,12 +14,13 @@ font = pygame.font.SysFont("SimHei", 22)
 # 绘制网格
 # =====================
 def draw_grid(screen):
-    for x in range(0, WIDTH, GRID_SIZE):
+    # 只绘制横向网格线
+    for y in range(0, HEIGHT, GRID_SIZE):
         pygame.draw.line(
             screen,
             GRID_COLOR,
-            (x, 0),
-            (x, HEIGHT)
+            (0, y),
+            (WIDTH, y)
         )
 
 # =====================
@@ -76,7 +77,7 @@ def main():
         # ★ 生成敌人
         enemy_timer += 1
         if enemy_timer >= 60:
-            enemies.append(Enemy())
+            enemies.append(SnakeEnemy())
             enemy_timer = 0
 
         # 更新敌人
