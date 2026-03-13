@@ -54,7 +54,7 @@ class SnakeEnemy:
         self.size = GRID_SIZE
         self.speed = 2
 
-        self.hp = random.randint(1, 5)
+        self.hp = random.randint(5, 9)
 
         # 初始状态向右（第0行是偶数行）
         self.state = "right"      # "right" / "left" / "down"

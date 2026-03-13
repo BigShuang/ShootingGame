@@ -10,7 +10,7 @@ class Player:
         self.grid_x = WIDTH //GRID_SIZE // 2 # 位于中间列
         self.grid_y = (HEIGHT - GRID_SIZE) // GRID_SIZE # 底部一行
         self.counter = 0 # 计数器（帧）
-        self.shoot_space = 20 # 发射间隔（帧）
+        self.shoot_space = 10 # 发射间隔（帧）
     
     def move(self, direction):
         self.grid_x += direction
