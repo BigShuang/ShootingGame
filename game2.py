@@ -1,7 +1,7 @@
 import pygame
 import time
 from constants import *
-from player import Player
+from player import AdvancedPlayer, Player
 from enemy import SnakeEnemy
 
 pygame.init()
@@ -35,7 +35,7 @@ def draw_top_bar(screen, score):
 # 主循环
 # =====================
 def main():
-    player = Player()
+    player = AdvancedPlayer()
     bullets = []
     enemies = []
     score = 0
