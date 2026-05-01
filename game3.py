@@ -2,7 +2,7 @@ import pygame
 import time
 from constants import *
 from player import AdvancedPlayer, Player
-from enemy import SnakeEnemy
+from enemy import SnakeEnemyS
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -79,13 +79,13 @@ def main():
         # ★ 生成敌人（链状，最多 50 个）
         
         if enemy_num == 0:
-            new_enemy = SnakeEnemy(enemy_num)
+            new_enemy = SnakeEnemyS(enemy_num)
             enemies.append(new_enemy)
             enemy_num += 1
         elif enemy_num < 50:
             tail = enemies[-1]
             if tail.grid_y == 0 and tail.x > 0:
-                new_enemy = SnakeEnemy(enemy_num)
+                new_enemy = SnakeEnemyS(enemy_num)
                 new_enemy.x = tail.x - GRID_SIZE + 4
                 enemies.append(new_enemy)
                 enemy_num+=1

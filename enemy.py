@@ -1,9 +1,10 @@
 import pygame
 import random
-from constants import WIDTH, GRID_SIZE, TOP_BAR_HEIGHT, HEIGHT, WHITE
+from constants import *
 
 pygame.init()
 enemy_font = pygame.font.SysFont("SimHei", 32)
+enemy_font2 = pygame.font.SysFont("SimHei", 26)
 
 # =====================
 # 敌人
@@ -118,7 +119,7 @@ class SnakeEnemyS:
         self.size = GRID_SIZE
         self.speed = 2
 
-        self.hp = random.randint(5, 9)
+        self.hp = random.randint(5, 39)
 
         # 初始状态向右（第0行是偶数行）
         self.state = "right"      # "right" / "left" / "down"
@@ -160,13 +161,34 @@ class SnakeEnemyS:
         return pygame.Rect(self.x, self.y, self.size, self.size)
 
     def draw(self, screen):
+        color = WHITE
+        if self.hp >= 30:
+            color = CRIMSON
+        elif self.hp >= 20:
+            color = PURPLE
+        elif self.hp >= 10:
+            color = BLUE
+        else:
+            color = WHITE
+
+        pygame.draw.circle(
+            screen,
+            color,
+            (self.x + GRID_SIZE // 2, int(self.y + GRID_SIZE // 2)),
+            GRID_SIZE // 2 - 4
+        )
+
         pygame.draw.circle(
             screen,
             WHITE,
             (self.x + GRID_SIZE // 2, int(self.y + GRID_SIZE // 2)),
-            GRID_SIZE // 2 - 4
+            GRID_SIZE // 2 - 8
         )
-        text = enemy_font.render(str(self.hp), True, (0, 0, 0))
+
+        if color != WHITE:
+            text = enemy_font2.render(str(self.hp % 10), True, color)
+        else:
+            text = enemy_font2.render(str(self.hp % 10), True, PURE_WHITE)
         rect = text.get_rect(center=(self.x + GRID_SIZE // 2,
                                      self.y + GRID_SIZE // 2))
         screen.blit(text, rect)
